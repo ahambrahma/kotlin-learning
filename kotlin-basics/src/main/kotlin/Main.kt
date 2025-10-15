@@ -15,6 +15,19 @@ fun printMessageWithPrefix(message: String, prefix: String = "Hello") {
     println("$prefix $message")
 }
 
+fun strLengthWithNullable(nullable1: String?): Int {
+    return (if (nullable1 == null) 0 else nullable1.length)
+}
+
+val lowerCaseString: (String) -> (String) = { text -> text.lowercase() }
+
+
+// Usage of Safe call
+fun lengthString(maybeString: String?): Int? = maybeString?.length
+
+// Usage of elvis operator
+fun lengthStringWithElvis(maybeString: String?): Int = maybeString?.length ?: 0
+
 fun main() {
     /* Basic printing and for loop */
     val name = "Kotlin"
@@ -118,4 +131,55 @@ fun main() {
     /***
      * Lambda expressions
      */
+    println()
+    val upperCaseString = { text: String -> text.uppercase() }
+    println(upperCaseString("Hello world"))
+
+    val numbers = listOf(1, 2, -1, -2, 4)
+    // Usage of lambda function within filter
+    val positives = numbers.filter({ x -> x > 0 })
+    println(positives)
+
+    val isNegative = {x:Int -> x < 0} // Wrap it will {} to mark it as a lambda function
+    // Pass on a lambda function as a parameter
+    val negatives = numbers.filter(isNegative)
+    println(negatives)
+
+    val doubles = numbers.map{ x -> x*2 }
+    println(doubles)
+
+    /***
+     * Classes
+     */
+
+    println(lowerCaseString("Hello world"))
+
+    val selfContact = Contact(1, "shubham@gmail.com")
+    selfContact.category = "self"
+
+    println(selfContact)
+
+    val selfContact2 = Contact(1, "shubham@gmail.com")
+    selfContact2.category = "self2"
+
+    println(selfContact == selfContact2)
+
+    val selfContact3 = Contact(1, "shubham@gmail.com")
+    selfContact3.category = "self"
+
+    println(selfContact == selfContact3)
+
+    /***
+     * Nullable types
+     */
+    var nullable: String? = "You can keep a null here"
+    nullable = null
+
+    println(strLengthWithNullable(nullable))
+
+
+    val nullString: String? = null
+    println(lengthString(nullString))
+
+    println(lengthStringWithElvis(nullString))
 }
