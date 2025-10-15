@@ -1,5 +1,20 @@
 package org.example
 
+fun hello() {
+    println()
+    println("Hello world")
+    println()
+}
+
+fun sum(x: Int, y: Int): Int {
+    return x + y
+}
+
+// Default prefix is Hello
+fun printMessageWithPrefix(message: String, prefix: String = "Hello") {
+    println("$prefix $message")
+}
+
 fun main() {
     /* Basic printing and for loop */
     val name = "Kotlin"
@@ -88,4 +103,19 @@ fun main() {
 
     println(result)
 
+    /**
+     * Functions
+     */
+    hello() // Using function to say hello
+    println("Sum of 2 and 3 is ${sum(2,3)}")
+
+    // Both should have same result
+    printMessageWithPrefix("Shubham", "Welcome")
+    printMessageWithPrefix(prefix = "Welcome", message = "Shubham")
+    printMessageWithPrefix("Shubham")
+
+
+    /***
+     * Lambda expressions
+     */
 }
