@@ -1,5 +1,11 @@
 package org.example
 
+fun speed(distance: Double = 42.123, time: Double): Double{
+  return distance / time
+}
+
+// In case of a function which doesn't return anything, behind the scenes, Kotlin returns a type called
+// Unit - equivalent of void
 fun hello() {
     println()
     println("Hello world")
@@ -116,6 +122,28 @@ fun main() {
 
     println(result)
 
+    val temperature = 48.5
+    val reaction = when {
+        temperature > 55 -> "It's too hot"
+        temperature < 40 -> "It's too cold"
+        else -> "It feels right"
+    }
+
+    // Multiple values evaluating to same result case
+    val quantity = 4
+
+    val pricePerBook = when (quantity) {
+        1 -> 19.99
+        2 -> 18.99
+        3,4 -> 16.99
+        else -> 14.99
+    }
+
+    println("Price per book: ${pricePerBook}")
+
+    println("Reaction based on temperature: ${reaction}")
+
+
     /**
      * Functions
      */
@@ -127,6 +155,9 @@ fun main() {
     printMessageWithPrefix(prefix = "Welcome", message = "Shubham")
     printMessageWithPrefix("Shubham")
 
+
+    // Edge case related to default arguments - when default argument comes first
+    println("Speed in case of edge case: ${String.format("%.3f", speed(time=8.27))}")
 
     /***
      * Lambda expressions
@@ -182,4 +213,34 @@ fun main() {
     println(lengthString(nullString))
 
     println(lengthStringWithElvis(nullString))
+
+    val smallCircle = Circle(4.2)
+    println("Circumference of small circle: ${smallCircle.circumference()}")
+    println("Area of small circle: ${smallCircle.area()}")
+    println("Diameter of small circle: ${smallCircle.diameter()}")
+
+    println()
+
+    val defaultCircle = Circle()
+    println("Circumference of default circle: ${defaultCircle.circumference()}")
+    println("Area of default circle: ${defaultCircle.area()}")
+    println("Diameter of small circle: ${defaultCircle.diameter()}")
+
+
+    val button = Button("Sample button")
+    val defaultButton = DefaultButton()
+
+    val abstractButtonImpl = ButtonImpl("Abstract button impl")
+    abstractButtonImpl.printDescription()
+
+    val simpleButton = SimpleButton(10, 20,  "Simple button")
+    println("Area: ${simpleButton.area()}")
+    println("Label: ${simpleButton.description()}")
+
+
+    // Enum examples
+    println(SchnauzerBreed.STANDARD.height)
+    println(SchnauzerBreed.MINIATURE.ordinal)
+    println(SchnauzerBreed.GIANT.isShorterThan(20))
+
 }
