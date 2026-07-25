@@ -4,6 +4,8 @@ fun speed(distance: Double = 42.123, time: Double): Double{
   return distance / time
 }
 
+const val taxMultiplier = 1.09
+
 // In case of a function which doesn't return anything, behind the scenes, Kotlin returns a type called
 // Unit - equivalent of void
 fun hello() {
@@ -243,4 +245,135 @@ fun main() {
     println(SchnauzerBreed.MINIATURE.ordinal)
     println(SchnauzerBreed.GIANT.isShorterThan(20))
 
+
+    // Null safety
+    val payment: Payment? = getPayment() // type of payment is Payment?
+    if (payment != null) {
+        val coffee = orderCoffee(payment) // type of payment is Payment here using smart casting
+    } else {
+        println("I can't order coffee today!")
+    }
+
+    val coffee = when (payment) {
+        null -> println("I can't order coffee today!")
+        else -> orderCoffee(payment)
+    }
+    println(coffee)
+
+    // Functions being passed as references
+    val withFiveDollarsOff = calculateTotal(20.0, discountForCouponCode("FIVE_BUCKS")) // $16.35
+    println("Price with 5 dollars off: ${withFiveDollarsOff}")
+    val withTenPercentOff  = calculateTotal(20.0, discountForCouponCode("TAKE_10"))  // $19.62
+    println("Price with 10% off: ${withTenPercentOff}")
+    val fullPrice          = calculateTotal(20.0, discountForCouponCode("NONE"))
+    println("Full price: ${fullPrice}")
+
+
+    // Usage of lambdas
+
+    // These are examples of trailing lambdas
+    val withFiveDollarsOff2 = calculateTotal(20.0) {price -> price - 5.0} // $16.35
+    val withTenPercentOff2  = calculateTotal(20.0) {price -> price * 0.9}  // $19.62
+    val fullPrice2          = calculateTotal(20.0) {price -> price }
+
+    println("Price with 5 dollars off: ${withFiveDollarsOff2}")
+    println("Price with 10 percent off: ${withTenPercentOff2}")
+    println("Price: ${fullPrice2}")
+
+    val withFiveDollarsOffComplexLambda = calculateTotal(20.0) { price ->
+        val result = price - 5.0
+        println("Initial price: $price")
+        println("Discounted price: $result")
+        result
+    }
+    println("Price with 5 dollars off: ${withFiveDollarsOffComplexLambda}")
+
+
+    val listSamples = ListSamples()
+    listSamples.display()
+
+    val setSamples = SetExamples()
+    setSamples.display()
+
+    val mapSamples = MapSamples()
+    mapSamples.display()
+
+    val mapListCombination = MapListCombination()
+    mapListCombination.display()
+
+    val helloStr = "hello"
+    println(helloStr.singleQuoted())
+
+    val helloStrNullable: String? = null
+    println(helloStrNullable.singleQuoted2())
+
+    val scopeFunctions = ScopeFunctions()
+    scopeFunctions.display()
+
+    val shadowingAndImplicitReceivers = ShadowingAndImplicitReceivers()
+    shadowingAndImplicitReceivers.display()
+
+    val interfaces = InterfaceExamples()
+    interfaces.display()
+
+    val classDelegation = ClassDelegation()
+    classDelegation.display()
+
+    val classDelegationForGeneralTypes = ClassDelegationForGeneralTypes()
+    classDelegationForGeneralTypes.display()
+
+    val abstractAndOpenClasses = AbstractAndOpenClasses()
+    abstractAndOpenClasses.display()
+
+    val anyClassMethodOverriding = AnyClassMethodOverriding()
+    anyClassMethodOverriding.display()
+
+    val dataClass = DataClasses()
+    dataClass.display()
+
+    val destructuringNormalClasses = DestructuringNormalClasses()
+    destructuringNormalClasses.display()
+
+    val sealedTypes = SealedTypes()
+    sealedTypes.display()
+
+    val runtimeExceptions = RuntimeExceptions()
+    runtimeExceptions.display()
+}
+
+// Extension function type
+fun String.singleQuoted() = "'$this'"
+// Nullable receiver types
+fun String?.singleQuoted2() = "'$this'"
+
+fun discountForCouponCodeLambda(couponCode: String): (Double) -> Double = when (couponCode) {
+    "FIVE_BUCKS" -> { price -> price - 5.0 }
+    "TAKE_10"    -> { price -> price * 0.9 }
+    else         -> { price -> price }
+}
+
+fun discountForCouponCode(couponCode: String): (Double) -> Double = when (couponCode) {
+    "FIVE_BUCKS" -> ::discountFiveDollars
+    "TAKE_10"    -> ::discountTenPercent
+    else         -> ::noDiscount
+}
+
+fun discountFiveDollars(price: Double): Double = price - 5.0
+fun discountTenPercent(price: Double): Double = price * 0.9
+fun noDiscount(price: Double): Double = price
+
+fun calculateTotal(
+    initialPrice: Double,
+    applyDiscount: (Double) -> Double
+): Double {
+    // Apply coupon discount
+    val priceAfterDiscount = applyDiscount(initialPrice)
+    // Apply tax
+    val total = priceAfterDiscount * taxMultiplier
+
+    return total
+}
+
+fun getPayment(): Payment? {
+    return Payment(10)
 }
