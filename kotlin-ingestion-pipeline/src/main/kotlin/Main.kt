@@ -33,8 +33,49 @@ import kotlin.system.measureTimeMillis
 
 fun main() = runBlocking {
     // TODO 1
+    println("-----------------------------------")
+    println("Trying out with default 0 capacity")
+    println("-----------------------------------")
+    val channel = Channel<LogEvent>()
+    driver(channel)
+
 
     // TODO 2
 
+    println("-----------------------------------")
+    println("Trying out with unlimited capacity")
+    println("-----------------------------------")
+
+    /* In this case producer completes producing all events immediately within 5-10 ms and then consumption keeps happening
+     Still, all the workers receive the same amount of messages
+     */
+
+    val channel2 = Channel<LogEvent>(capacity = Channel.UNLIMITED)
+    driver(channel2)
+
     // TODO 3
+
+    println("-----------------------------------")
+    println("Trying out with conflated capacity")
+    println("-----------------------------------")
+
+    /*
+    Since producer and consumer actually run on actually the same internal thread but on different coroutines.
+    By the time consumers start reading events, they get overridden within the producer
+     */
+    val channel3 = Channel<LogEvent>(capacity = Channel.CONFLATED)
+    driver(channel3)
+
+}
+
+private suspend fun driver(channel: Channel<LogEvent>) = coroutineScope {
+    val consumerJobs = (1..4).map { workerId ->
+        async {
+            consumeLogEvents(workerId, channel, processingDelayMs = 20)
+        }
+    }
+    val producerJob = launch { produceLogEvents(channel, 200) }
+    producerJob.join()
+    val stats2 = consumerJobs.awaitAll()
+    println(stats2)
 }

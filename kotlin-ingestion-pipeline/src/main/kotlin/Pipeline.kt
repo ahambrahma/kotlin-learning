@@ -1,9 +1,9 @@
 package ingestion.pipeline
 
-// You'll need most of these - add the rest as your IDE suggests them:
-// import kotlinx.coroutines.channels.SendChannel
-// import kotlinx.coroutines.channels.ReceiveChannel
-// import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.delay
+import kotlin.system.measureTimeMillis
 
 /**
  * Sends [count] LogEvents into [channel] as fast as possible - no delay here, this is
@@ -17,7 +17,15 @@ package ingestion.pipeline
  *    channel)` loops end naturally instead of suspending forever waiting for one more element
  */
 suspend fun produceLogEvents(channel: SendChannel<LogEvent>, count: Int) {
-    TODO("implement me")
+    val timeTaken = measureTimeMillis {
+        for (i in 1..count) {
+            val logEvent = LogEvent(i, "Message: $i")
+            channel.send(logEvent)
+            println("Produced message: $logEvent")
+        }
+        channel.close()
+    }
+    println("Time taken to send all messages is: $timeTaken")
 }
 
 /**
@@ -42,5 +50,12 @@ suspend fun consumeLogEvents(
     channel: ReceiveChannel<LogEvent>,
     processingDelayMs: Long
 ): WorkerStats {
-    TODO("implement me")
+    var count = 0
+    var totalProcessingMs = 0L
+    for (event in channel) {
+        totalProcessingMs += measureTimeMillis { delay(processingDelayMs) }
+        println("WorkerId: $workerId, Consumed event: $event")
+        count++
+    }
+    return WorkerStats(workerId, count, totalProcessingMs)
 }
