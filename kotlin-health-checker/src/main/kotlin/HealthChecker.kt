@@ -1,15 +1,16 @@
 package org.example
 
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlin.random.Random
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.supervisorScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import kotlinx.coroutines.withTimeoutOrNull
+
 // You'll need most of these - add the rest as your IDE suggests them:
-// import kotlinx.coroutines.coroutineScope
-// import kotlinx.coroutines.supervisorScope
-// import kotlinx.coroutines.async
-// import kotlinx.coroutines.awaitAll
-// import kotlinx.coroutines.delay
-// import kotlinx.coroutines.withTimeoutOrNull
-// import kotlinx.coroutines.sync.Semaphore
-// import kotlinx.coroutines.sync.withPermit
-// import kotlin.random.Random
 
 /**
  * Simulates checking one "endpoint". In a later module we'll swap this out for a real HTTP call -
@@ -23,7 +24,18 @@ package org.example
  *  - on failure, set success = false and put a short message in `error`
  */
 suspend fun checkEndpoint(url: String): EndpointResult {
-    TODO("implement me")
+    val delayMs = Random.nextLong(100, 2000)
+    var startMs = System.currentTimeMillis()
+    delay(delayMs)
+    val elapsedTimeMs = System.currentTimeMillis() - startMs
+
+    val success = Random.nextInt(100) < 80
+    var errorMessage: String? = null
+    if (!success) {
+        errorMessage = "Error occurred while trying to hit the url: $url"
+    }
+    
+    return EndpointResult(url, success, elapsedTimeMs, errorMessage)
 }
 
 /**
@@ -47,8 +59,24 @@ suspend fun checkAllEndpoints(
     urls: List<String>,
     maxConcurrent: Int = 5,
     perCheckTimeoutMs: Long = 1500L
-): List<EndpointResult> {
-    TODO("implement me")
+): List<EndpointResult> = supervisorScope {
+    val semaphore = Semaphore(maxConcurrent)
+    val deferredResults = urls.map { url ->
+        async {
+            semaphore.withPermit {
+                // Try/catch so that we always get a result from each of the coroutines and none of them fail as such.
+                try {
+                    withTimeoutOrNull(perCheckTimeoutMs) { checkEndpoint(url) }
+                        ?: EndpointResult(url, success = false, latencyMs = perCheckTimeoutMs, error = "timeout")
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    EndpointResult(url, success = false, latencyMs = 0, error = e.message ?: "unknown error")
+                }
+            }
+        }
+    }
+    deferredResults.awaitAll()
 }
 
 /**
@@ -57,5 +85,17 @@ suspend fun checkAllEndpoints(
  *   FAILED: https://service-c.internal (timeout)
  */
 fun printReport(results: List<EndpointResult>) {
-    TODO("implement me")
+    var totalLatency = 0L
+    var healthyEndpointCount = 0
+    results.forEach { result ->
+        if (result.success) {
+            healthyEndpointCount++
+            totalLatency += result.latencyMs
+        }
+    }
+    val avgLatency = if (healthyEndpointCount != 0) totalLatency / healthyEndpointCount else 0L
+    println("$healthyEndpointCount/${results.size} endpoints healthy, avg latency ${avgLatency}ms")
+    results.filter { !it.success }.forEach { result ->
+        println("FAILED: ${result.url} (${result.error})")
+    }
 }

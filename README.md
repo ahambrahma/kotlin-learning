@@ -39,6 +39,14 @@ one decision framework rather than five isolated facts, plus the over-chaining a
 small config-loading + fake-connection domain. Read `theory.md` first, then fill in the TODOs
 across `ConfigLoader.kt` and `Main.kt` - run with `./gradlew run` once implemented.
 
+## kotlin-ingestion-pipeline
+
+Channels as a producer/consumer primitive and backpressure as a real design decision - `Channel`
+capacity (`RENDEZVOUS`/buffered/`UNLIMITED`/`CONFLATED`), `send`/`receive`/`close`, fan-out across
+multiple consumers on one channel, and how this differs from the `Semaphore`-based concurrency
+limiting from `kotlin-health-checker`. Read `theory.md` first, then fill in the TODOs across
+`Pipeline.kt` and `Main.kt` - run with `./gradlew run` once implemented.
+
 ---
 
 **Convention going forward:** every module in this repo is its own standalone Gradle project

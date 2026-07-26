@@ -16,7 +16,7 @@ fun main() = runBlocking {
     )
 
     val totalTime = measureTimeMillis {
-        val results = checkAllEndpoints(urls, maxConcurrent = 3, perCheckTimeoutMs = 1500L)
+        val results = checkAllEndpoints(urls, maxConcurrent = 8, perCheckTimeoutMs = 1500L)
         printReport(results)
     }
 
