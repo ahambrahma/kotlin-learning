@@ -57,5 +57,6 @@ suspend fun consumeLogEvents(
         println("WorkerId: $workerId, Consumed event: $event")
         count++
     }
+
     return WorkerStats(workerId, count, totalProcessingMs)
 }
