@@ -18,7 +18,7 @@ Audience: strong Java 8 + Go background, new to Kotlin, wants intermediate/advan
 | — | `kotlin-concurrency` | Pre-existing: suspend, launch/async, structured concurrency, cancellation | done (pre-existing, not touched) |
 | 1 | `kotlin-order-intake` | Null safety gaps (`!!`, `as?`) + value classes (primitive obsession) | done |
 | 2 | `kotlin-oop-idioms` | Sealed class vs sealed interface (properly reasoned this time), enums with per-constant behavior, companion object vs `object` vs object expression, operator overloading, property delegation (`by lazy`, `Delegates.observable`) | done |
-| 3 | `kotlin-scope-functions-lab` | The scope-function decision framework (`let`/`also`/`apply`/`run`/`with` - context object as `it` vs `this`, lambda result vs receiver returned), `takeIf`/`takeUnless`, `use` for `AutoCloseable` resources, and the over-chaining anti-pattern | scaffolded, awaiting your implementation |
+| 3 | `kotlin-scope-functions-lab` | The scope-function decision framework (`let`/`also`/`apply`/`run`/`with` - context object as `it` vs `this`, lambda result vs receiver returned), `takeIf`/`takeUnless`, `use` for `AutoCloseable` resources, and the over-chaining anti-pattern | done |
 | 4 | `kotlin-generics-lab` | Variance (`in`/`out`), star projection, inline functions with reified type parameters, `crossinline`/`noinline` | not started |
 | 5 | `kotlin-health-checker` | Coroutines fundamentals capstone: Dispatchers, exception isolation (coroutineScope vs supervisorScope), timeouts, concurrency limiting | scaffolded, awaiting your implementation |
 | 6 | `kotlin-ingestion-pipeline` | Channel-based producer/consumer, backpressure | not started |
