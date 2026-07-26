@@ -19,17 +19,17 @@ Audience: strong Java 8 + Go background, new to Kotlin, wants intermediate/advan
 | 1 | `kotlin-order-intake` | Null safety gaps (`!!`, `as?`) + value classes (primitive obsession) | done |
 | 2 | `kotlin-oop-idioms` | Sealed class vs sealed interface (properly reasoned this time), enums with per-constant behavior, companion object vs `object` vs object expression, operator overloading, property delegation (`by lazy`, `Delegates.observable`) | done |
 | 3 | `kotlin-scope-functions-lab` | The scope-function decision framework (`let`/`also`/`apply`/`run`/`with` - context object as `it` vs `this`, lambda result vs receiver returned), `takeIf`/`takeUnless`, `use` for `AutoCloseable` resources, and the over-chaining anti-pattern | done |
-| 4 | `kotlin-generics-lab` | Variance (`in`/`out`), star projection, inline functions with reified type parameters, `crossinline`/`noinline` | not started |
-| 5 | `kotlin-health-checker` | Coroutines fundamentals capstone: Dispatchers, exception isolation (coroutineScope vs supervisorScope), timeouts, concurrency limiting | scaffolded, awaiting your implementation |
-| 6 | `kotlin-ingestion-pipeline` | Channel-based producer/consumer, backpressure | not started |
-| 7 | `kotlin-shared-state` | Deliberately trigger + fix a race condition with Mutex/Atomic | not started |
-| 8 | `kotlin-api-aggregator` | Real HTTP calls from coroutines, retry+backoff, timeouts, structured error modeling | not started |
-| 9 | `kotlin-rate-limiter-service` | Ktor service, token-bucket middleware, in-memory then swappable backing store | not started |
-| 10 | `kotlin-consistent-hash-ring` | Consistent hashing library + CLI | not started |
-| 11 | `kotlin-leader-election` | Nodes-as-coroutines, channels-as-network, toy Bully/Raft-lite election, partition simulation | not started |
-| 12 | `kotlin-concurrency-testing` | `kotlinx-coroutines-test`, virtual time, reproducing a race with a test | not started |
-| 13a | `kotlin-task-queue-core` | Capstone stage 1: single-shard in-memory job queue, worker pool, rate limit + circuit breaker | not started |
-| 13b | `kotlin-task-queue-sharded` | Capstone stage 2: add consistent-hash sharding across worker groups to 13a's design | not started |
+| 4 | `kotlin-health-checker` | Coroutines fundamentals capstone: Dispatchers, exception isolation (coroutineScope vs supervisorScope), timeouts, concurrency limiting | scaffolded, awaiting your implementation |
+| 5 | `kotlin-ingestion-pipeline` | Channel-based producer/consumer, backpressure | not started |
+| 6 | `kotlin-shared-state` | Deliberately trigger + fix a race condition with Mutex/Atomic | not started |
+| 7 | `kotlin-api-aggregator` | Real HTTP calls from coroutines, retry+backoff, timeouts, structured error modeling | not started |
+| 8 | `kotlin-rate-limiter-service` | Ktor service, token-bucket middleware, in-memory then swappable backing store | not started |
+| 9 | `kotlin-consistent-hash-ring` | Consistent hashing library + CLI | not started |
+| 10 | `kotlin-leader-election` | Nodes-as-coroutines, channels-as-network, toy Bully/Raft-lite election, partition simulation | not started |
+| 11 | `kotlin-concurrency-testing` | `kotlinx-coroutines-test`, virtual time, reproducing a race with a test | not started |
+| 12a | `kotlin-task-queue-core` | Capstone stage 1: single-shard in-memory job queue, worker pool, rate limit + circuit breaker | not started |
+| 12b | `kotlin-task-queue-sharded` | Capstone stage 2: add consistent-hash sharding across worker groups to 12a's design | not started |
+| 13 | `kotlin-generics-lab` | Variance (`in`/`out`), star projection, inline functions with reified type parameters, `crossinline`/`noinline` | not started - deliberately pushed to last, see note below |
 
 Not on the ledger yet, deliberately deferred: a dedicated testing/mocking-idioms project (JUnit5 + Kotlin, MockK, Kotest) — flagged as a real gap during review of `kotlin-order-intake`, but you chose to prioritize OOP idioms and generics first. Worth revisiting once 2–4 is done.
 
@@ -40,6 +40,7 @@ Not on the ledger yet, deliberately deferred: a dedicated testing/mocking-idioms
 - **Channels/Flow (old Module 4) split into two projects** (`kotlin-ingestion-pipeline`, `kotlin-shared-state`) instead of one — backpressure and race-condition-hunting are each meaty enough to deserve their own focused build rather than being crammed together.
 - **Testing (old Module 8) is now a fresh project, not a retrofit.** The original plan had you adding tests to earlier modules; that's no longer possible now that modules aren't edited after handoff, so it's a new small project built specifically to practice testing concurrent code.
 - **The capstone (old Module 9) is now two incremental stages** instead of one big combine-everything project — stage 1 gets the core (queue + workers + resilience) working standalone; stage 2 adds sharding on top of that same design in a new project, rather than asking you to get everything right in one pass.
+- **`kotlin-generics-lab` moved to the very end of the ledger**, per your call — you find it the least interesting topic, so it's deprioritized rather than sitting next in line. Nothing later in the roadmap has a hard dependency on it (each project re-implements what it needs rather than importing from earlier modules), so pushing it last doesn't block anything.
 
 ## Java-8-you-knew vs. what's changed (reference, come back to this)
 
