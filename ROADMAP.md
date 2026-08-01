@@ -25,8 +25,8 @@ Audience: strong Java 8 + Go background, new to Kotlin, wants intermediate/advan
 | 7 | `kotlin-api-aggregator` | Real HTTP calls from coroutines, retry+backoff, timeouts, structured error modeling | done |
 | 8 | `kotlin-rate-limiter-service` | Ktor service, token-bucket middleware, in-memory then swappable backing store | done |
 | 9 | `kotlin-consistent-hash-ring` | Consistent hashing library + CLI | done |
-| 10 | `kotlin-leader-election` | Nodes-as-coroutines, channels-as-network, toy Bully election, partition simulation | scaffolded, awaiting your implementation |
-| 10b | `kotlin-raft-lite` | Follow-up to 10: a simplified single-node-group Raft — terms instead of static ids, majority-quorum votes, and a replicated log (not just "who's leader") | not started |
+| 10 | `kotlin-leader-election` | Nodes-as-coroutines, channels-as-network, toy Bully election, partition simulation | done |
+| 10b | `kotlin-raft-lite` | Follow-up to 10: a simplified single-node-group Raft — terms instead of static ids, majority-quorum votes, and a replicated log (not just "who's leader") | scaffolded, awaiting your implementation |
 | 11 | `kotlin-concurrency-testing` | `kotlinx-coroutines-test`, virtual time, reproducing a race with a test | not started |
 | 12a | `kotlin-task-queue-core` | Capstone stage 1: single-shard in-memory job queue, worker pool, rate limit + circuit breaker | not started |
 | 12b | `kotlin-task-queue-sharded` | Capstone stage 2: add consistent-hash sharding across worker groups to 12a's design | not started |
