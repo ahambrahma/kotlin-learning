@@ -20,11 +20,11 @@ Audience: strong Java 8 + Go background, new to Kotlin, wants intermediate/advan
 | 2 | `kotlin-oop-idioms` | Sealed class vs sealed interface (properly reasoned this time), enums with per-constant behavior, companion object vs `object` vs object expression, operator overloading, property delegation (`by lazy`, `Delegates.observable`) | done |
 | 3 | `kotlin-scope-functions-lab` | The scope-function decision framework (`let`/`also`/`apply`/`run`/`with` - context object as `it` vs `this`, lambda result vs receiver returned), `takeIf`/`takeUnless`, `use` for `AutoCloseable` resources, and the over-chaining anti-pattern | done |
 | 4 | `kotlin-health-checker` | Coroutines fundamentals capstone: Dispatchers, exception isolation (coroutineScope vs supervisorScope), timeouts, concurrency limiting | done |
-| 5 | `kotlin-ingestion-pipeline` | Channel-based producer/consumer, backpressure | scaffolded, awaiting your implementation |
-| 6 | `kotlin-shared-state` | Deliberately trigger + fix a race condition with Mutex/Atomic | not started |
-| 7 | `kotlin-api-aggregator` | Real HTTP calls from coroutines, retry+backoff, timeouts, structured error modeling | not started |
-| 8 | `kotlin-rate-limiter-service` | Ktor service, token-bucket middleware, in-memory then swappable backing store | not started |
-| 9 | `kotlin-consistent-hash-ring` | Consistent hashing library + CLI | not started |
+| 5 | `kotlin-ingestion-pipeline` | Channel-based producer/consumer, backpressure | done |
+| 6 | `kotlin-shared-state` | Deliberately trigger + fix a race condition with Mutex/Atomic | done |
+| 7 | `kotlin-api-aggregator` | Real HTTP calls from coroutines, retry+backoff, timeouts, structured error modeling | done |
+| 8 | `kotlin-rate-limiter-service` | Ktor service, token-bucket middleware, in-memory then swappable backing store | done |
+| 9 | `kotlin-consistent-hash-ring` | Consistent hashing library + CLI | scaffolded, awaiting your implementation |
 | 10 | `kotlin-leader-election` | Nodes-as-coroutines, channels-as-network, toy Bully/Raft-lite election, partition simulation | not started |
 | 11 | `kotlin-concurrency-testing` | `kotlinx-coroutines-test`, virtual time, reproducing a race with a test | not started |
 | 12a | `kotlin-task-queue-core` | Capstone stage 1: single-shard in-memory job queue, worker pool, rate limit + circuit breaker | not started |

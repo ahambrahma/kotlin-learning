@@ -47,6 +47,38 @@ multiple consumers on one channel, and how this differs from the `Semaphore`-bas
 limiting from `kotlin-health-checker`. Read `theory.md` first, then fill in the TODOs across
 `Pipeline.kt` and `Main.kt` - run with `./gradlew run` once implemented.
 
+## kotlin-shared-state
+
+Race conditions traced down to the exact interleaving that causes a lost update, why this is the
+first module that needs a real multi-threaded dispatcher to observe, `Mutex` as a coroutine-aware
+lock (and why `synchronized`/`ReentrantLock` are actively dangerous around suspending code),
+`AtomicInteger` as the lock-free alternative, and the boundary between them (single value vs a
+multi-field invariant) - via a counter and a latency-stats tracker, each with a deliberately racy
+version and a version you fix. Read `theory.md` first, then fill in the TODOs across `Counters.kt`,
+`LatencyStats.kt`, and `Main.kt` - run with `./gradlew run` once implemented.
+
+## kotlin-api-aggregator
+
+Real HTTP calls from coroutines against a tiny local test server: wrapping blocking
+`java.net.http.HttpClient` I/O in `Dispatchers.IO`, structured error modeling with a sealed
+`ApiError`/`ApiResult` hierarchy instead of caught exceptions, retry with exponential backoff +
+full jitter (and the retryable-vs-not judgment call), and fan-out aggregation across several
+endpoints via `supervisorScope`/`async`. Read `theory.md` first, then fill in the TODOs across
+`HttpClientWrapper.kt`, `RetryPolicy.kt`, `Aggregator.kt`, and `Main.kt` - run with `./gradlew run`
+once implemented.
+
+## kotlin-rate-limiter-service
+
+A real Ktor HTTP server for the first time, with a hand-rolled token-bucket rate limiter wired in
+as request-intercepting middleware. Covers the token bucket algorithm (lazy refill via
+`System.nanoTime()`), Ktor's plugin "Base API" (`BaseApplicationPlugin` + `pipeline.intercept(...)`
++ `proceed()`) versus the simplified `onCall` DSL and why the rate limiter specifically needs the
+former, concurrency-safety for the shared per-client bucket state via `Mutex` (same reasoning as
+`kotlin-shared-state`), and designing a `RateLimiterStore` interface so the in-memory backing store
+can later be swapped for something else. Read `theory.md` first, then fill in the TODOs across
+`TokenBucket.kt`, `RateLimiterStore.kt`, `RateLimiterPlugin.kt`, `Application.kt`, and `Main.kt` -
+run with `./gradlew run` once implemented.
+
 ---
 
 **Convention going forward:** every module in this repo is its own standalone Gradle project
