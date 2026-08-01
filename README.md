@@ -79,6 +79,27 @@ can later be swapped for something else. Read `theory.md` first, then fill in th
 `TokenBucket.kt`, `RateLimiterStore.kt`, `RateLimiterPlugin.kt`, `Application.kt`, and `Main.kt` -
 run with `./gradlew run` once implemented.
 
+## kotlin-consistent-hash-ring
+
+A change of pace - no coroutines, no HTTP, pure data structures and algorithms. Builds a
+consistent hash ring over string node names: nodes and keys hashed onto the same numeric space,
+`TreeMap.ceilingKey` + wraparound to find each key's owning node, and virtual nodes (replicas per
+physical node) for even load distribution. `Main.kt` proves the actual payoff with real numbers -
+comparing how many keys reshuffle when a node is added under consistent hashing versus naive
+modulo hashing. Read `theory.md` first, then fill in the TODOs across `ConsistentHashRing.kt` and
+`Main.kt` - run with `./gradlew run` once implemented.
+
+## kotlin-leader-election
+
+Distributed systems as a single-process simulation: nodes are coroutines, the network is a set of
+`Channel`s, and the goal is the Bully leader-election algorithm - election/cascade-upward,
+heartbeat-based failure detection, and the "adopt the highest claimed id" rule that resolves
+split-brain automatically once a simulated network partition heals. Deliberately single-threaded
+(no `Dispatchers.Default`) to keep this module's lesson - message timing/ordering - separate from
+`kotlin-shared-state`'s lesson (thread-safety). Read `theory.md` first, then fill in the TODOs
+across `Network.kt` and `Node.kt` - `Message.kt` and `Main.kt` are given. Run with `./gradlew run`
+once implemented and watch the demo survive a leader crash and a network partition.
+
 ---
 
 **Convention going forward:** every module in this repo is its own standalone Gradle project
